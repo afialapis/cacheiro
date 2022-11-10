@@ -1,0 +1,60 @@
+{
+  "name": "cacheiro",
+  "version": "0.0.1",
+  "description": "The simplest -yet effective- cache manager",
+  "keywords": [
+    "js",
+    "cache"
+  ],
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/cacheiro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/cacheiro/issues"
+  },
+  "homepage": "https://cacheiro.afialapis.com/",
+  "files": [
+    "lib",
+    "dist",
+    "logo"
+  ],
+  "type": "module",
+  "main": "./lib/index.js",
+  "cjs": "./dist/cacheiro.cjs",
+  "browser": "./dist/cacheiro.umd.js",
+  "module": "./dist/cacheiro.mjs",
+  "exports": {
+    "import": "./dist/cacheiro.mjs",
+    "default": "./lib/index.js",
+    "require": "./dist/cacheiro.cjs"
+  },
+  "scripts": {
+    "clean-lib": "rm -rf lib && mkdir lib",
+    "clean-dist": "rm -rf dist && mkdir dist",
+    "lint": "npx xeira lint",
+    "test": "npx xeira test ./test/before.mjs ./test/units/*.cjs",
+    "lib": "npm run --silent clean-lib && npx xeira transpile",
+    "dist": "npm run --silent clean-dist && npx xeira bundle",
+    "prepare": "npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist",
+    "reset": "npm run --silent clean-lib && npm run --silent clean-dist && rm -fr node_modules package-lock.json && npm i"
+  },
+  "devDependencies": {
+    "xeira": "^0.0.23"
+  },
+  "dependencies": {},
+  "peerDependencies": {},
+  "babel": {
+    "extends": "./node_modules/xeira/configs/babel.cjs"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.cjs"
+    ]
+  }
+}
