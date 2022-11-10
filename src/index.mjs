@@ -6,5 +6,5 @@ function initCache (_store= 'raw') {
 }
 
 
-export default initCache
+export {initCache}
 
