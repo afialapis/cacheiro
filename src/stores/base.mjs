@@ -35,6 +35,18 @@ class CacheStore {
     this.setItem(key, value)
     return value    
   }
+
+  async getOrSetItemAsync(key, get_callback, set_callback) {
+    if (this.hasItem(key)) {
+      await get_callback()
+      return this.getItem(key)
+    }
+
+    const value= await set_callback()
+    this.setItem(key, value)
+    return value    
+  }
+
 }
   
 
