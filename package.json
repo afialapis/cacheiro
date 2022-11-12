@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -45,7 +45,7 @@
     "reset": "npm run --silent clean-lib && npm run --silent clean-dist && rm -fr node_modules package-lock.json && npm i"
   },
   "devDependencies": {
-    "xeira": "^0.0.23"
+    "xeira": "^0.0.24"
   },
   "dependencies": {},
   "peerDependencies": {},
