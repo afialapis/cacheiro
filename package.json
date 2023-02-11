@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -37,15 +37,18 @@
   "scripts": {
     "clean-lib": "rm -rf lib && mkdir lib",
     "clean-dist": "rm -rf dist && mkdir dist",
+    "clean-site": "rm -rf arredemo",
+    "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
     "lint": "npx xeira lint",
     "test": "npx xeira test ./test/before.mjs ./test/units/*.cjs",
     "lib": "npm run --silent clean-lib && npx xeira transpile",
     "dist": "npm run --silent clean-dist && npx xeira bundle",
-    "prepare": "npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist",
-    "reset": "npm run --silent clean-lib && npm run --silent clean-dist && rm -fr node_modules package-lock.json && npm i"
+    "site": "npm run --silent clean-site && npx xeira site",
+    "prepare": "npm run --silent clean-all && npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist && npm run --silent site",
+    "reset": "npm run --silent clean-all && rm -fr node_modules && rm -fr package-lock.json && npm i"
   },
   "devDependencies": {
-    "xeira": "^0.0.24"
+    "xeira": "^0.0.36"
   },
   "dependencies": {},
   "peerDependencies": {},

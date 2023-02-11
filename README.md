@@ -1,14 +1,7 @@
+![Cacheiro logo](https://cacheiro.afialapis.com/logo.png)
+
 [![NPM Version](https://badge.fury.io/js/cacheiro.svg)](https://www.npmjs.com/package/cacheiro)
-[![Dependency Status](https://david-dm.org/afialapis/cacheiro.svg)](https://david-dm.org/afialapis/cacheiro)
 [![NPM Downloads](https://img.shields.io/npm/dm/cacheiro.svg?style=flat)](https://www.npmjs.com/package/cacheiro)
-
-# Table of Contents
-
-1. [Intro](#intro)
-2. [Install](#install)
-3. [Getting Started](#getting-started)
-
-# Intro
 
 `cacheiro` is the simplest -yet effective- cache manager.
 
@@ -48,6 +41,10 @@ cache.getOrSetItem('key',
     return 'value'
   } 
 )
-// 'value'
-
+// Value is not there, let's create it
+// => 'value'
 ```
+
+# Future
+
+Better cache technologies will be wrapped under `cacheiro`. [Redis](https://redis.io/), at least. Hopefully.

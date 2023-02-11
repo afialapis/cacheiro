@@ -1,0 +1,13 @@
+{
+  "theme": "default",
+  "favicon": "logo/favicon/cacheiro.png",
+  "logo": "logo/cacheiro_logo_200.png",
+  "company": "Afialapis",
+  "url": "cacheiro.afialapis.com",
+  "doc_versions": null,
+  "md": {
+    "strip_details_tag": true,
+    "keep_summary_content": false
+  },
+  "demo_entry": null
+}
