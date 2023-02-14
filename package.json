@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -21,18 +21,16 @@
   "homepage": "https://cacheiro.afialapis.com/",
   "files": [
     "lib",
-    "dist",
-    "logo"
+    "dist"
   ],
   "type": "module",
   "main": "./lib/index.cjs",
   "cjs": "./dist/cacheiro.cjs",
-  "browser": "./dist/cacheiro.umd.js",
   "module": "./dist/cacheiro.mjs",
   "exports": {
     "import": "./dist/cacheiro.mjs",
-    "default": "./lib/index.cjs",
-    "require": "./dist/cacheiro.cjs"
+    "require": "./dist/cacheiro.cjs",
+    "default": "./lib/index.cjs"
   },
   "scripts": {
     "clean-lib": "rm -rf lib && mkdir lib",
@@ -48,10 +46,8 @@
     "reset": "npm run --silent clean-all && rm -fr node_modules && rm -fr package-lock.json && npm i"
   },
   "devDependencies": {
-    "xeira": "^0.0.36"
+    "xeira": "^0.0.40"
   },
-  "dependencies": {},
-  "peerDependencies": {},
   "babel": {
     "extends": "./node_modules/xeira/configs/babel.cjs"
   },
