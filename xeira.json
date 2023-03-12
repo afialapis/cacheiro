@@ -2,8 +2,6 @@
   "product": "package",
   "target": "node",
   "source_index": "./src/index.mjs",
-  "react": false,
-  "monorepo": false,
   "linter": "eslint",
   "transpile_folder": "./lib",
   "transpiler": "babel",
