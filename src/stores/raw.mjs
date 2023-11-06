@@ -1,8 +1,8 @@
 import CacheSore from './base.mjs'
 
 class CacheStoreRaw extends CacheSore {
-  constructor () {
-    super()
+  constructor (config) {
+    super(config)
     this._cache= {}
   }
 

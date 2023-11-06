@@ -2,7 +2,8 @@
 
 
 class CacheStore {
-  constructor () {
+  constructor (config) {
+    this.config= config
   }
 
   getKeys() {
