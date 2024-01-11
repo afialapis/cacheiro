@@ -2,8 +2,9 @@
   "theme": "default",
   "favicon": "logo/favicon/cacheiro.png",
   "logo": "logo/cacheiro_logo_200.png",
+  "url": "https://www.afialapis.com/os/cacheiro",
   "company": "Afialapis",
-  "url": "cacheiro.afialapis.com",
+  "company_url": "https://www.afialapis.com",
   "doc_versions": null,
   "md": {
     "strip_details_tag": true,

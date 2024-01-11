@@ -1,4 +1,4 @@
-![Cacheiro logo](https://cacheiro.afialapis.com/logo.png)
+![Cacheiro logo](https://www.afialapis.com/os/cacheiro/logo.png)
 
 [![NPM Version](https://badge.fury.io/js/cacheiro.svg)](https://www.npmjs.com/package/cacheiro)
 [![NPM Downloads](https://img.shields.io/npm/dm/cacheiro.svg?style=flat)](https://www.npmjs.com/package/cacheiro)

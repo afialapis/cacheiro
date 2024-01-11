@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/afialapis/cacheiro/issues"
   },
-  "homepage": "https://cacheiro.afialapis.com/",
+  "homepage": "https://www.afialapis.com/os/cacheiro",
   "files": [
     "lib",
     "dist"
@@ -46,7 +46,7 @@
     "reset": "npm run --silent clean-all && rm -fr node_modules && rm -fr package-lock.json && npm i"
   },
   "devDependencies": {
-    "xeira": "^0.3.24"
+    "xeira": "^0.3.26"
   },
   "babel": {
     "extends": "./node_modules/xeira/configs/babel.cjs"

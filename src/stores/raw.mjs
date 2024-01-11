@@ -14,8 +14,13 @@ class CacheStoreRaw extends CacheSore {
     return Object.prototype.hasOwnProperty.call(this._cache, key)
   }
 
-  setItem(key, value) {
+  setItem(key, value, expirationTime= undefined) {
     this._cache[key]= value
+    if (expirationTime) {
+      setTimeout(() => {
+        this.unsetItem(key)
+      }, expirationTime)
+    }
   }
 
   getItem(key) {
