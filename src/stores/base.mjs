@@ -1,54 +1,81 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "key|value" }]*/
 
+import { initLogger } from "../logger/index.mjs"
 
-class CacheStore {
-  constructor (config) {
-    this.config= config
+
+export class BaseStore {
+  constructor (name, config) {
+    this.name    = name
+    this.config  = config
+    
+    this._namespace = config?.namespace || ''
+    this.version = isNaN(config?.version) ? 1 : parseInt(config.version)
+
+    this.logger  = initLogger(config?.log)
+
+    this.vsep    = config?.version_separator || '::'
   }
 
-  getKeys() {
-    throw 'calustra: CacheStore.getKeys() not implemented'
+  logDebug(s) {
+    this.logger.debug(`[cacheiro:${this.name}][${this._prefixVKey}] ${s}`)
   }
 
-  hasItem(key) {
-    throw 'calustra: CacheStore.hasItem() not implemented'
+  logError(s) {
+    this.logger.error(`[cacheiro:${this.name}][${this._prefixVKey}] ${s}`)
+  }
+  
+  get _prefixVKey() {
+    let ns= ''
+    if (this._namespace) {
+      ns= `${this._namespace}${this.vsep}`
+    }
+    return `${ns}${this.version}${this.vsep}`
   }
 
-  setItem(key, value) {
-    throw 'calustra: CacheStore.setItem() not implemented'
+  makeVkey(key) {
+    return `${this._prefixVKey}${key}`
   }
 
-  getItem(key) {
-    throw 'calustra: CacheStore.getItem() not implemented'
-  }
-
-  unsetItem(key) {
-    throw 'calustra: CacheStore.unsetItem() not implemented'
-  }
-
-  getOrSetItem(key, get_callback, set_callback) {
-    if (this.hasItem(key)) {
-      get_callback()
-      return this.getItem(key)
+  stripVKey(vkey) {
+    if (! vkey) {
+      return vkey
     }
 
-    const value= set_callback()
-    this.setItem(key, value)
-    return value    
+    return vkey.slice(this._prefixVKey.length)   
   }
 
-  async getOrSetItemAsync(key, get_callback, set_callback) {
-    if (this.hasItem(key)) {
-      await get_callback()
-      return this.getItem(key)
-    }
+  async getKeys(pattern) {
+    throw 'calustra: BaseStore.getKeys() not implemented'
+  }
 
-    const value= await set_callback()
-    this.setItem(key, value)
-    return value    
+  async hasItem(key) {
+    throw 'calustra: BaseStore.hasItem() not implemented'
+  }
+
+  async setItem(key, value) {
+    throw 'calustra: BaseStore.setItem() not implemented'
+  }
+
+  async getItem(key) {
+    throw 'calustra: BaseStore.getItem() not implemented'
+  }
+
+  async unsetItem(key) {
+    throw 'calustra: BaseStore.unsetItem() not implemented'
+  }
+
+  async getOrSetItem(key, callback) {
+    let value 
+
+    const exists = await this.hasItem(key)
+    if (exists) {
+      value = await this.getItem(key)
+    } else {
+      value = await callback()
+      await this.setItem(key, value)
+    }
+    return value   
   }
 
 }
   
-
-export default CacheStore

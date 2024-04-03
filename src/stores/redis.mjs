@@ -1,62 +1,83 @@
 import redis from 'redis'
-import { red, magenta } from 'tinguir'
+import {red, green} from 'tinguir'
+import { BaseStore } from './base.mjs'
+import { initLogger } from '../logger/index.mjs'
+
+class RedisStore extends BaseStore {
+  constructor (config, client) {
+    super('redis', config)
+    this.client = client
+  }
 
 
-import CacheSore from './base.mjs'
+  async getKeys(pattern= '*') {
+    const rkeys = await this.client.keys(this.makeVkey(pattern))
+    return rkeys.map(k => this.stripVKey(k))
+  }
 
-class CacheStoreRedis extends CacheSore {
-  constructor (config) {
-    super(config)
-    this.client= redis.createClient(config.port, config.host)
+  async hasItem(key) {
+    const vkey = this.makeVkey(key)
+    const exists = await this.client.exists(vkey)
+    return exists==1
+  }
+
+  async setItem(key, value, expirationTime= undefined) {
+    const vkey = this.makeVkey(key)
+    let opts= {}
+    if (expirationTime) {
+      opts.EX= expirationTime
+    }
+    const r= await this.client.set(vkey, value, opts)
+    return r == 'OK' ? true : false    
+  }
+
+  async getItem(key) {
+    const vkey = this.makeVkey(key)
+    const value = await this.client.get(vkey)
+    return value
+  }
+
+  async expireTime(key) {
+    const vkey = this.makeVkey(key)
+    const ex = await this.client.expireTime(vkey)
+    return ex
+
+  }
+
+  async unsetItem(key) {
+    const vkey = this.makeVkey(key)
+    const exists = await this.hasItem(vkey)
+    if (exists) {
+      await this.client.del(vkey)
+    }
+  }
+
+
+}
+
+
+
+export async function cacheiro_redis_store_init(config) {
+  const logger = initLogger(config?.log)
+  const client= await redis.createClient(config.redis)
     .on('connect', function () {
-      console.info(`${magenta('REDIS')} Connection established!`)
+      logger.debug(`[cacheiro:redis][v${config?.version||1}] ${green('Connection established!')}`)
     })
     .on('error', function (err) {
       let msg
       try {
         if (err instanceof redis.ReplyError)
-          msg = `${magenta('REDIS')} ${red('Error ' + err.code)} Command: ${err.command} ${err.toString()}`
+          msg = `Error ${err.code}. Command: ${err.command} ${err.toString()}`
         else
-          msg = `${magenta('REDIS')} ${red('Error ' + err.code)} ${err.toString()}`
+          msg = `Error ${err.code}. ${err.toString()}`
       } catch(e) {
-        msg = `${magenta('REDIS')} ${red('Error ')} ${e}`
+        msg = `Error ${e}`
       }
-      console.error(msg)
+      logger.error(`[cacheiro:redis][v${config?.version||1}] ${red(msg)}`)
     })
-    .connect()
+  .connect()
 
-  }
+  const cache = new RedisStore(config, client)
 
-  getKeys() {
-    
-  }
-
-  hasItem(key) {
-    return this.client.exists(key)==1
-  }
-
-  setItem(key, value, expirationTime= undefined) {
-    let opts= {}
-    if (expirationTime) {
-      opts.EX= expirationTime
-    }
-    const r= this.client.set(key, value, opts)
-    return r == 'OK' ? true : false    
-  }
-
-  getItem(key) {
-    return this.client.get(key)
-  }
-
-  unsetItem(key) {
-    if (this.hasItem(key)) {
-      this.client.del(key)
-    }
-  }
+  return cache
 }
-
-export default CacheStoreRedis
-
-
-
-

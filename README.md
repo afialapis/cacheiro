@@ -17,9 +17,8 @@ npm install cacheiro [--save-dev]
 
 import {initCache} from 'cacheiro'
 
-// store_type: 'raw'
-//   Currently just memory cache is supported
-const cache= initCache(store_type)
+// store_type: 'memory', 'redis' or 'combined'
+const cache= initCache('combined')
 
 cache.setItem('key', 'value')
 
