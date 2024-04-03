@@ -46,12 +46,11 @@ class RedisStore extends BaseStore {
 
   async unsetItem(key) {
     const vkey = this.makeVkey(key)
-    const exists = await this.hasItem(vkey)
+    const exists = await this.hasItem(key)
     if (exists) {
       await this.client.del(vkey)
     }
   }
-
 
 }
 

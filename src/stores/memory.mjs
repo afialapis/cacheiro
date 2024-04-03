@@ -48,10 +48,10 @@ class MemoryStore extends BaseStore {
 
   async unsetItem(key) {
     const vkey = this.makeVkey(key)
-    const exists = await this.hasItem(vkey)
-    if (exists) {
+    //const exists = await this.hasItem(key)
+    //if (exists) {
       delete this._cache[vkey]
-    }
+    //}
   }
 
 }
