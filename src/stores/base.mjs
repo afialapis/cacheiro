@@ -1,19 +1,20 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "key|value" }]*/
 
-import { initLogger } from "../logger/index.mjs"
+import { cacheiroInitLogger } from "../logger/index.mjs"
+
 
 
 export class BaseStore {
-  constructor (name, config) {
+  constructor (name, options) {
     this.name    = name
-    this.config  = config
+    this.options  = options
     
-    this._namespace = config?.namespace || ''
-    this.version = isNaN(config?.version) ? 1 : parseInt(config.version)
+    this._namespace = options.namespace
+    this.version = isNaN(options?.version) ? 1 : parseInt(options.version)
 
-    this.logger  = initLogger(config?.log)
+    this.logger  = cacheiroInitLogger(options?.log)
 
-    this.vsep    = config?.version_separator || '::'
+    this.vsep    = options?.version_separator || '::'
   }
 
   logDebug(s) {
@@ -22,6 +23,13 @@ export class BaseStore {
 
   logError(s) {
     this.logger.error(`[cacheiro:${this.name}][${this._prefixVKey}] ${s}`)
+  }
+
+  getTTL(ttl) {
+    if (! isNaN(ttl)) {
+      return parseInt(ttl)
+    }
+    return parseInt(this.options.ttl)
   }
   
   get _prefixVKey() {
@@ -62,6 +70,14 @@ export class BaseStore {
 
   async unsetItem(key) {
     throw 'calustra: BaseStore.unsetItem() not implemented'
+  }
+
+  async unsetAll(pattern) {
+    const keys = await this.getKeys(pattern)
+    for (const k of keys) {
+      await this.unsetItem(k)
+    }
+    return keys.length
   }
 
   async getOrSetItem(key, callback) {

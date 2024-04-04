@@ -1,17 +1,18 @@
-import { cacheiro_memory_store_init   } from "./stores/memory.mjs"
-import { cacheiro_redis_store_init    } from "./stores/redis.mjs"
-import { cacheiro_combined_store_init } from "./stores/combined.mjs"
+import { cacheiroMergeOptions } from "./options/index.mjs"
+import { cacheiroMemoryStoreInit   } from "./stores/memory.mjs"
+import { cacheiroRedisStoreInit    } from "./stores/redis.mjs"
+import { cacheiroCombinedStoreInit } from "./stores/combined.mjs"
 
-async function initCache (config) {
-  const type = config?.type || 'memory'
+async function initCache (options) {
+  const moptions = cacheiroMergeOptions(options)
+
+  const storeInit = moptions.type=='redis'
+    ? cacheiroRedisStoreInit
+    : moptions.type=='combined'
+      ? cacheiroCombinedStoreInit
+      : cacheiroMemoryStoreInit
   
-  const storeInit = type=='redis'
-    ? cacheiro_redis_store_init
-    : type=='combined'
-      ? cacheiro_combined_store_init
-      : cacheiro_memory_store_init
-  
-  const cache= await storeInit(config)
+  const cache= await storeInit(moptions)
   return cache  
 }
 

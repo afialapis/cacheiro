@@ -1,10 +1,10 @@
 import { BaseStore } from './base.mjs'
-import { cacheiro_memory_store_init } from './memory.mjs'
-import { cacheiro_redis_store_init } from './redis.mjs'
+import { cacheiroMemoryStoreInit } from './memory.mjs'
+import { cacheiroRedisStoreInit } from './redis.mjs'
 
 export class CombinedStore extends BaseStore {
-  constructor (config, memory, redis) {
-    super('combined', config)
+  constructor (options, memory, redis) {
+    super('combined', options)
     this._memory = memory
     this._redis = redis
   }
@@ -16,7 +16,12 @@ export class CombinedStore extends BaseStore {
   }
 
   async hasItem(key) {
-    return (await this._redis.hasItem(key))
+    const mhas = await this._memory.hasItem(key)
+    if (mhas) {
+      return mhas
+    }
+    const rhas = await this._redis.hasItem(key)
+    return rhas
   }
 
   // When reading, try first memory
@@ -42,13 +47,20 @@ export class CombinedStore extends BaseStore {
   // When updating, just do it twice
 
   async unsetItem(key) {
-    await this._memory.unsetItem(key)
-    await this._redis.unsetItem(key)
+    const mexists = await this._memory.unsetItem(key)
+    const rexists = await this._redis.unsetItem(key)
+    return mexists || rexists
+  }
+
+  async unsetAll(pattern) {
+    const mlen = await this._memory.unsetAll(pattern)
+    const rlen = await this._redis.unsetAll(pattern)
+    return mlen + rlen
   }
   
-  async setItem(key, value, expirationTime= undefined) {
-    const mok = await this._memory.setItem(key, value, expirationTime)
-    const rok = await this._redis.setItem(key, value, expirationTime)
+  async setItem(key, value, ttl= undefined) {
+    const mok = await this._memory.setItem(key, value, ttl)
+    const rok = await this._redis.setItem(key, value, ttl)
     return (mok && rok)
   }
 
@@ -58,10 +70,15 @@ export class CombinedStore extends BaseStore {
 
 
 
-export async function cacheiro_combined_store_init(config) {
-  const memory = cacheiro_memory_store_init(config)
-  const redis = await cacheiro_redis_store_init(config)
+export async function cacheiroCombinedStoreInit(options) {
+  const memory = await cacheiroMemoryStoreInit(options)
+  const redis = await cacheiroRedisStoreInit(options)
 
-  const cache = new CombinedStore(config, memory, redis)
+  const cache = new CombinedStore(options, memory, redis)
+
+  if (options?.clean) {
+    await cache.unsetAll('*')
+  }
+
   return cache
 }

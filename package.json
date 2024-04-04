@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.0.13",
+  "version": "0.1.0",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -45,6 +45,9 @@
     "prepare": "npm run --silent clean-all && npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist && npm run --silent site",
     "reset": "npm run --silent clean-all && rm -fr node_modules && rm -fr package-lock.json && npm i"
   },
+  "dependencies": {
+    "redis": "^4.6.13"
+  },
   "devDependencies": {
     "xeira": "^0.3.26"
   },
@@ -55,8 +58,5 @@
     "extends": [
       "./node_modules/xeira/configs/eslint.cjs"
     ]
-  },
-  "dependencies": {
-    "redis": "^4.6.13"
   }
 }

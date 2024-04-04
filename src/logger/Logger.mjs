@@ -10,7 +10,7 @@ const LEVELS= {
   silly  : 6
 }
 
-class Logger {
+class CacheiroLogger {
   constructor (level) {
     this.set_level(level)
   }
@@ -50,4 +50,4 @@ class Logger {
   }
 }
 
-export default Logger
+export default CacheiroLogger

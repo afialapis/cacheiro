@@ -1,5 +1,9 @@
-import {cacheiro_simple_test} from './units/simple.mjs'
+import {cacheiroSimpleTest} from './units/simple.mjs'
+import {cacheiroCombinedTest} from './units/combined.mjs'
 
-cacheiro_simple_test('memory')
-cacheiro_simple_test('redis')
-cacheiro_simple_test('combined')
+
+cacheiroSimpleTest('memory')
+cacheiroSimpleTest('redis')
+cacheiroSimpleTest('combined')
+
+cacheiroCombinedTest()

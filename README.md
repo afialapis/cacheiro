@@ -1,40 +1,62 @@
 ![Cacheiro logo](https://www.afialapis.com/os/cacheiro/logo.png)
-
 [![NPM Version](https://badge.fury.io/js/cacheiro.svg)](https://www.npmjs.com/package/cacheiro)
 [![NPM Downloads](https://img.shields.io/npm/dm/cacheiro.svg?style=flat)](https://www.npmjs.com/package/cacheiro)
 
+
+---
+
+> **cacheiro**. substantivo masculino:
+
+> **Porco semental.**
+
+> _Levar a porca ao cacheiro._
+
+---
+
+# Intro
 `cacheiro` is the simplest -yet effective- cache manager.
 
 # Install
-
 ```
-npm install cacheiro [--save-dev]
+npm install cacheiro
 ```
 
 # Getting Started
 
 ```js
-
 import {initCache} from 'cacheiro'
 
-// store_type: 'memory', 'redis' or 'combined'
-const cache= initCache('combined')
+const options = {
+  type: 'combined', // or 'memory' or 'redis'
+  redis: {
+    host: '127.0.0.1',
+    port: 6379
+  },
+  namespace: 'my_cache',
+  version: 1,
+  clean: true,
+  ttl: 86400 * 1000 * 30,
+  log: 'debug'
+}
 
-cache.setItem('key', 'value')
+const cache= await initCache(options)
 
-cache.hasItem('key')
+await cache.setItem('key', 'value')
 // true
 
-cache.getKeys()
+await cache.hasItem('key')
+// true
+
+await cache.getKeys()
 // ['key']
 
-cache.getItem('key')
+await cache.getItem('key')
 // 'value'
 
-cache.unsetItem('key')
+await cache.unsetItem('key')
+// true
 
-cache.getOrSetItem('key', 
-  () => console.log('Value was there'),
+await cache.getOrSetItem('key', 
   () => {
     console.log('Value is not there, let\'s create it')
     return 'value'
@@ -42,8 +64,93 @@ cache.getOrSetItem('key',
 )
 // Value is not there, let's create it
 // => 'value'
+
+await cache.unsetAll()
+// 1
 ```
 
-# Future
+# API
 
-Better cache technologies will be wrapped under `cacheiro`. [Redis](https://redis.io/), at least. Hopefully.
+## `await initCache(options)`
+Creates and inits the cache store. 
+
+### `type`
+
+· `memory`: will cache stuff directly on memory. If you loose the variable, you lose the cache.
+· `redis`: Will use [`node-redis`](https://github.com/redis/node-redis) as caching layer. You need to pass `options.redis` field.
+· `combined`: Combination of both `memory` and `redis`. You need to pass `options.redis` field. `memory` cache will act as a read-only replica of `redis`.
+
+### `redis`
+_Redis_ connection parameters. Refer to [`node-redis`](https://github.com/redis/node-redis) for further info.
+
+### `namespace`
+Prefix to be used for all the cache keys managed by `cacheiro`. Default is `'cacheiro'`.
+
+### `version`
+Handle cached data versions to easily unvalidate previous content. Default is `1`.
+
+### `clean`
+If `true`, cache will be clean right after initialization. (It applies only to `redis` or `combined`). Default is `false`.
+
+### `ttl`
+Expiration time in miliseconds for the cached values. They can be setted also at item level on `cache.setItem(key, value, ttl)`. Default is `86400000 * 30`, 30 days.
+
+### `log`
+It can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels, for example:
+
+```js
+  log: class CustomLogger {
+    _log(l, s) {
+      console.log(`[${l}] ${s}`)
+    }
+    
+    silly(s) { this.log('silly', s) }
+    debug(s) { this.log('debug', s) }
+    info(s)  { this.log('info', s) }
+    warn(s)  { this.log('warn', s) }
+    error(s) { this.log('error', s) }
+  }
+}
+```
+
+Default is `debug`.
+
+## `await setItem(key, value, ttl = <ms>)`
+Stores a `value` in the cache, identified by `key`. If specified, `ttl` is the expiration time (or [Time To Live](https://en.wikipedia.org/wiki/Time_to_live)) in miliseconds.
+
+
+## `await getItem(key)`
+Returns, if exists, stored `value` for `key`. `undefined` otherwise.
+
+## `await hasItem(key)`
+Returns `true` if there is some `value` stored for `key`. `false` otherwise.
+
+## `await unsetItem(key)`
+Removes from cache any `value` stored for `key`. Returns `true` if there was some `value` stored. `false` otherwise.
+
+## `await getKeys(pattern)`
+Returns an array of `keys` present in the cache and matching `pattern`.
+
+In the case of `redis` or `combined` caches, `pattern` is handled by [Redis](https://redis.io/commands/keys/).
+
+In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#memory-cache-and-pattern-in-getkeys), unless you specify no pattern or the `'*'` wildcard value. 
+
+## `await unsetAll(pattern)`
+Removes from cache all values matching `pattern`.
+
+In the case of `redis` or `combined` caches, `pattern` is handled by [Redis](https://redis.io/commands/keys/).
+
+In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#memory-cache-and-pattern-in-getkeys), unless you specify no pattern or the `'*'` wildcard value. 
+
+
+# TODO
+
+## `memory` cache and `pattern`
+Find a beter solution than `RegExp`. Something closer to `Redis` `pattern`'s handling.
+
+# Changelog
+
+## 1.0.0
+Created `redis` and `combined` stores. `raw` is now `memory`.
+Every method is now `async`.
+npm run test

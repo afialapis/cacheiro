@@ -1,7 +1,7 @@
 
 import Logger from './Logger.mjs'
 
-export function initLogger(options) {
+export function cacheiroInitLogger(options) {
   let logger
   if ( (options==undefined) || (typeof options == 'string')) {
     logger= new Logger(options || 'info')
