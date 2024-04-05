@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",

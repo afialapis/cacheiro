@@ -72,6 +72,21 @@ export class BaseStore {
     throw 'calustra: BaseStore.unsetItem() not implemented'
   }
 
+  async getAll(pattern) {
+    const vmap = {}
+    const keys = await this.getKeys(pattern)
+    for (const k of keys) {
+      const v = await this.getItem(k)
+      vmap[k] = v
+    }
+    return vmap
+  }
+
+  async getValues(pattern) {
+    const vmap = await this.getAll(pattern)
+    return Object.values(vmap)
+  }
+
   async unsetAll(pattern) {
     const keys = await this.getKeys(pattern)
     for (const k of keys) {

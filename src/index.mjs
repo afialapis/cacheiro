@@ -3,7 +3,7 @@ import { cacheiroMemoryStoreInit   } from "./stores/memory.mjs"
 import { cacheiroRedisStoreInit    } from "./stores/redis.mjs"
 import { cacheiroCombinedStoreInit } from "./stores/combined.mjs"
 
-async function initCache (options) {
+async function cacheiro (options) {
   const moptions = cacheiroMergeOptions(options)
 
   const storeInit = moptions.type=='redis'
@@ -17,5 +17,5 @@ async function initCache (options) {
 }
 
 
-export {initCache}
+export {cacheiro}
 

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {initCache} from '../../src/index.mjs'
+import {cacheiro} from '../../src/index.mjs'
 import {cacheiroTestConfig} from '../config.mjs'
 import data from '../data.mjs'
 
@@ -19,7 +19,7 @@ export function cacheiroSimpleTest(cache_type) {
     
 
     it("should create the cache instance", async () => {   
-      cache = await initCache(cacheiroTestConfig(cache_type, {version: 1, clean: true}))
+      cache = await cacheiro(cacheiroTestConfig(cache_type, {version: 1, clean: true}))
 
       assert.strictEqual(cache.name, cache_type)
     })  
@@ -82,7 +82,7 @@ export function cacheiroSimpleTest(cache_type) {
     })
 
     it("should create the cache instance with version 2", async () => {   
-      cache = await initCache(cacheiroTestConfig(cache_type, {version: 2, clean: false}))
+      cache = await cacheiro(cacheiroTestConfig(cache_type, {version: 2, clean: false}))
 
       assert.strictEqual(cache.name, cache_type)
     })  
@@ -94,7 +94,7 @@ export function cacheiroSimpleTest(cache_type) {
     })
 
     it("should revert the cache instance to version 1", async () => {   
-      cache = await initCache(cacheiroTestConfig(cache_type, {version: 1, clean: false}))
+      cache = await cacheiro(cacheiroTestConfig(cache_type, {version: 1, clean: false}))
 
       assert.strictEqual(cache.name, cache_type)
     })  
@@ -115,7 +115,7 @@ export function cacheiroSimpleTest(cache_type) {
     })
 
     it("should revert the cache instance to version 2", async () => {   
-      cache = await initCache(cacheiroTestConfig(cache_type, {version: 2, clean: false}))
+      cache = await cacheiro(cacheiroTestConfig(cache_type, {version: 2, clean: false}))
 
       assert.strictEqual(cache.name, cache_type)
     })  

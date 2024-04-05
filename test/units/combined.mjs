@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {initCache} from '../../src/index.mjs'
+import {cacheiro} from '../../src/index.mjs'
 import {cacheiroTestConfig} from '../config.mjs'
 
 export function cacheiroCombinedTest() {
@@ -10,7 +10,7 @@ export function cacheiroCombinedTest() {
     let cache
 
     it("should create the cache instance", async () => {   
-      cache = await initCache(cacheiroTestConfig('combined', {version: 1, clean: true}))
+      cache = await cacheiro(cacheiroTestConfig('combined', {version: 1, clean: true}))
 
       assert.strictEqual(cache.name, 'combined')
     })  

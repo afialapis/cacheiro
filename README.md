@@ -24,7 +24,7 @@ npm install cacheiro
 # Getting Started
 
 ```js
-import {initCache} from 'cacheiro'
+import {cacheiro} from 'cacheiro'
 
 const options = {
   type: 'combined', // or 'memory' or 'redis'
@@ -39,7 +39,7 @@ const options = {
   log: 'debug'
 }
 
-const cache= await initCache(options)
+const cache= await cacheiro(options)
 
 await cache.setItem('key', 'value')
 // true
@@ -71,14 +71,14 @@ await cache.unsetAll()
 
 # API
 
-## `await initCache(options)`
+## `await cacheiro(options)`
 Creates and inits the cache store. 
 
 ### `type`
 
-· `memory`: will cache stuff directly on memory. If you loose the variable, you lose the cache.
-· `redis`: Will use [`node-redis`](https://github.com/redis/node-redis) as caching layer. You need to pass `options.redis` field.
-· `combined`: Combination of both `memory` and `redis`. You need to pass `options.redis` field. `memory` cache will act as a read-only replica of `redis`.
+- `memory`: cache stuff directly on memory. If you loose the variable, you lose the cache.
+- `redis`: use [`node-redis`](https://github.com/redis/node-redis) as caching layer. You need to pass `options.redis` field.
+- `combined`: combination of both `memory` and `redis`. You need to pass `options.redis` field. `memory` cache will act as a read-only replica of `redis`.
 
 ### `redis`
 _Redis_ connection parameters. Refer to [`node-redis`](https://github.com/redis/node-redis) for further info.
@@ -128,16 +128,19 @@ Returns `true` if there is some `value` stored for `key`. `false` otherwise.
 ## `await unsetItem(key)`
 Removes from cache any `value` stored for `key`. Returns `true` if there was some `value` stored. `false` otherwise.
 
-## `await getKeys(pattern)`
+## `await getKeys(`[`pattern`](#pattern-parameter)`)`
 Returns an array of `keys` present in the cache and matching `pattern`.
 
-In the case of `redis` or `combined` caches, `pattern` is handled by [Redis](https://redis.io/commands/keys/).
+## `await getAll(`[`pattern`](#pattern-parameter)`)`
+Returns an object like {`key`: `value`...} of all the stuff present in the cache and matching `pattern`.
 
-In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#memory-cache-and-pattern-in-getkeys), unless you specify no pattern or the `'*'` wildcard value. 
+## `await getValues(`[`pattern`](#pattern-parameter)`)`
+Returns an array of all the values present in the cache whose `key` is matching `pattern`.
 
-## `await unsetAll(pattern)`
+## `await unsetAll(`[`pattern`](#pattern-parameter)`)`
 Removes from cache all values matching `pattern`.
 
+## `pattern` parameter
 In the case of `redis` or `combined` caches, `pattern` is handled by [Redis](https://redis.io/commands/keys/).
 
 In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#memory-cache-and-pattern-in-getkeys), unless you specify no pattern or the `'*'` wildcard value. 
@@ -148,9 +151,15 @@ In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#mem
 ## `memory` cache and `pattern`
 Find a beter solution than `RegExp`. Something closer to `Redis` `pattern`'s handling.
 
+
 # Changelog
 
-## 1.0.0
+## 0.1.1
+
+Added `getAll(pattern)` and `getValues(pattern)` methods.
+`initCache()` is now `cacheiro()`.
+
+## 0.1.0
 Created `redis` and `combined` stores. `raw` is now `memory`.
 Every method is now `async`.
 npm run test
