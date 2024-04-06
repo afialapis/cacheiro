@@ -162,6 +162,9 @@ Find a beter solution than `RegExp`. Something closer to `Redis` `pattern`'s han
 
 # Changelog
 
+## 0.1.3
+Fix `logger.warning` => `logger.warn`.
+
 ## 0.1.2
 Limit `memory` cache's `ttl` to the max 32-bit `int` (`2147483647`). Show warning if greater value was passed.
 

@@ -22,7 +22,7 @@ export class BaseStore {
   }
 
   logWarning(s) {
-    this.logger.warning(`[cacheiro:${this.name}][${this._prefixVKey}] ${yellow(s)}`)
+    this.logger.warn(`[cacheiro:${this.name}][${this._prefixVKey}] ${yellow(s)}`)
   }
 
   logError(s) {
