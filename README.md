@@ -93,7 +93,8 @@ Handle cached data versions to easily unvalidate previous content. Default is `1
 If `true`, cache will be clean right after initialization. (It applies only to `redis` or `combined`). Default is `false`.
 
 ### `ttl`
-Expiration time in miliseconds for the cached values. They can be setted also at item level on `cache.setItem(key, value, ttl)`. Default is `86400000 * 30`, 30 days.
+Expiration time in miliseconds for the cached values. They can be setted also at item level on `cache.setItem(key, value, ttl)`. Default is `86400000`, 1 day.
+Notice that for `memory` cache, `ttl` is handled though `setTimeout`. This has a limit of 32-buit integers (max `ttl` is `2147483647`, a bit less of 25 days).
 
 ### `log`
 It can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels, for example:
@@ -148,11 +149,21 @@ In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#mem
 
 # TODO
 
+## detect _Redis_ is installed in the system
+
+And, if not, failback to `memory` cache.
+
+## `memory` cache and `ttl`
+Find a better expiring method than `setTimeout()`. Probably passing a `cron` through `options`.
+
 ## `memory` cache and `pattern`
 Find a beter solution than `RegExp`. Something closer to `Redis` `pattern`'s handling.
 
 
 # Changelog
+
+## 0.1.2
+Limit `memory` cache's `ttl` to the max 32-bit `int` (`2147483647`). Show warning if greater value was passed.
 
 ## 0.1.1
 

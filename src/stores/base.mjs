@@ -1,7 +1,7 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "key|value" }]*/
 
 import { cacheiroInitLogger } from "../logger/index.mjs"
-
+import {red, yellow} from 'tinguir'
 
 
 export class BaseStore {
@@ -21,8 +21,12 @@ export class BaseStore {
     this.logger.debug(`[cacheiro:${this.name}][${this._prefixVKey}] ${s}`)
   }
 
+  logWarning(s) {
+    this.logger.warning(`[cacheiro:${this.name}][${this._prefixVKey}] ${yellow(s)}`)
+  }
+
   logError(s) {
-    this.logger.error(`[cacheiro:${this.name}][${this._prefixVKey}] ${s}`)
+    this.logger.error(`[cacheiro:${this.name}][${this._prefixVKey}] ${red(s)}`)
   }
 
   getTTL(ttl) {

@@ -6,7 +6,7 @@ export function cacheiroMergeOptions(options) {
     version: options?.version || 1,
     clean: options?.clean == true,
     
-    ttl: options?.ttl || 86400000 * 30,
+    ttl: options?.ttl || 86400 * 1000,
     
     log: options?.log || 'debug'
   }

@@ -1,5 +1,7 @@
 import { BaseStore } from './base.mjs'
 
+const MAX_TIMEOUT_TTL = 2147483647
+
 class MemoryStore extends BaseStore {
   constructor (options) {
     super('memory', options)
@@ -32,7 +34,12 @@ class MemoryStore extends BaseStore {
     const vkey = this.makeVkey(key)
     self._cache[vkey]= value
 
-    const rttl = this.getTTL(ttl)
+    let rttl = this.getTTL(ttl)
+
+    if (rttl > MAX_TIMEOUT_TTL) {
+      self.logWarning(`Memory cache is expired using setTimeout, which has a ttl limit of ${MAX_TIMEOUT_TTL}. A greater value was passed ${rttl} but it will be restricted to the limit.`)
+      rttl = MAX_TIMEOUT_TTL     
+    }
     
     if (rttl) {
       setTimeout(() => {
