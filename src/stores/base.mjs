@@ -33,7 +33,10 @@ export class BaseStore {
     if (! isNaN(ttl)) {
       return parseInt(ttl)
     }
-    return parseInt(this.options.ttl)
+    if (! isNaN(this.options.ttl)) {
+      return parseInt(this.options.ttl)
+    }
+    return undefined
   }
   
   get _prefixVKey() {

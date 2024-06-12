@@ -6,6 +6,7 @@ class MemoryStore extends BaseStore {
   constructor (options) {
     super('memory', options)
     this._cache= {}
+    this._cleaners= {}
   }
 
   async getKeys(pattern) {
@@ -36,16 +37,18 @@ class MemoryStore extends BaseStore {
 
     let rttl = this.getTTL(ttl)
 
-    if (rttl > MAX_TIMEOUT_TTL) {
-      self.logWarning(`Memory cache is expired using setTimeout, which has a ttl limit of ${MAX_TIMEOUT_TTL}. A greater value was passed ${rttl} but it will be restricted to the limit.`)
-      rttl = MAX_TIMEOUT_TTL     
-    }
-    
     if (rttl) {
-      setTimeout(() => {
+      if (rttl > MAX_TIMEOUT_TTL) {
+        self.logWarning(`Memory cache is expired using setTimeout, which has a ttl limit of ${MAX_TIMEOUT_TTL}. A greater value was passed ${rttl} but it will be restricted to the limit.`)
+        rttl = MAX_TIMEOUT_TTL     
+      }
+
+      const cleanerId = setTimeout(() => {
         self.logDebug(`Expiring ${key} after ${rttl} ms`)
-        self.unsetItem(key)
+        self.unsetItem(key, true)
       }, rttl)
+
+      this._cleaners[vkey] = cleanerId
     }
 
     return true
@@ -56,13 +59,21 @@ class MemoryStore extends BaseStore {
     return this._cache[vkey]
   }
 
-  async unsetItem(key) {
+  async unsetItem(key, auto) {
     const exists = await this.hasItem(key)
     if (!exists) {
       return false
     }
-    
+
     const vkey = this.makeVkey(key)
+
+    if (auto !==true) {
+      try {
+        clearTimeout(this._cleaners[vkey])
+      } catch {}
+    }
+    
+    delete this._cleaners[vkey]
     delete this._cache[vkey]
     return true
   }
