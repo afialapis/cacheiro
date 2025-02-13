@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -46,10 +46,10 @@
     "reset": "npm run --silent clean-all && rm -fr node_modules && rm -fr package-lock.json && npm i"
   },
   "dependencies": {
-    "redis": "^4.6.13"
+    "redis": "^4.7.0"
   },
   "devDependencies": {
-    "xeira": "^0.4.2"
+    "xeira": "^1.0.1"
   },
   "babel": {
     "extends": "./node_modules/xeira/configs/babel.cjs"
