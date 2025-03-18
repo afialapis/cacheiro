@@ -75,7 +75,7 @@ export async function cacheiroRedisStoreInit(options) {
         else
           msg = `Error ${err.code}. ${err.toString()}`
       } catch(e) {
-        msg = `Error ${e}`
+        msg = `Error ${err.code}. ${err.toString()}`
       }
       logger.error(`[cacheiro:redis][v${options?.version||1}] ${red(msg)}`)
     })

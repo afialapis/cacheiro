@@ -16,7 +16,7 @@
 
 ## Intro
 
-`cacheiro` is the simplest -yet effective- cache manager.
+[`cacheiro`](https://www.afialapis.com/os/cacheiro) is the simplest -yet effective- cache manager.
 
 ## Install
 
@@ -32,7 +32,7 @@ import {cacheiro} from 'cacheiro'
 const options = {
   type: 'combined', // or 'memory' or 'redis'
   redis: {
-    host: '127.0.0.1',
+    host: '127.0.0.1', // '0.0.0.0' if in Docker
     port: 6379
   },
   namespace: 'my_cache',
@@ -152,6 +152,15 @@ In the case of `memory` cache, `cacheiro` will create a [`RegExp(pattern)`](#mem
 
 
 ## Changelog
+
+### 0.4.0
+
+Upgraded `xeira`, which means Node >= 21
+
+### 0.3.1
+
+`instanceof redis.ReplyError` causes error `TypeError: Right-hand side of 'instanceof' is not an object` when running inside Docker. 
+Still dunno why. Just try-catching by now.
 
 ### 0.3.0
 
