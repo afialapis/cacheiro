@@ -5,7 +5,6 @@ import {cacheiro} from '../src/index.mjs'
 global.cacheiro = cacheiro
 
 
-console.log(global.cacheiro)
 cacheiroSimpleTest('memory')
 cacheiroSimpleTest('redis')
 cacheiroSimpleTest('combined')
