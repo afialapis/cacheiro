@@ -1,11 +1,10 @@
 import {cacheiroSimpleTest} from './units/simple.mjs'
 import {cacheiroCombinedTest} from './units/combined.mjs'
 
-import {cacheiro} from '../src/index.mjs'
+import {cacheiro} from '../dist/cacheiro.node.bundle.mjs'
 global.cacheiro = cacheiro
 
 
-console.log(global.cacheiro)
 cacheiroSimpleTest('memory')
 cacheiroSimpleTest('redis')
 cacheiroSimpleTest('combined')

@@ -1,8 +1,10 @@
 import assert from 'assert'
-import {cacheiro} from '../../src/index.mjs'
 import {cacheiroTestConfig} from '../config.mjs'
 
+
+
 export function cacheiroCombinedTest() {
+  const cacheiro = global.cacheiro
 
   describe(`Combined Test`, function () {
     this.timeout(2000)

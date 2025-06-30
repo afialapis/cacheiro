@@ -1,5 +1,4 @@
 import assert from 'assert'
-import {cacheiro} from '../../src/index.mjs'
 import {cacheiroTestConfig} from '../config.mjs'
 import data from '../data.mjs'
 
@@ -10,6 +9,7 @@ function sleep(ms) {
 }
 
 export function cacheiroSimpleTest(cache_type) {
+  const cacheiro = global.cacheiro
 
   describe(`${cache_type} Cache`, function () {
     this.timeout(TTL*3)

@@ -1,4 +1,4 @@
-import {createClient} from 'redis'
+import {createClient} from '@redis/client'
 import {red, green} from 'tinguir'
 import { BaseStore } from './base.mjs'
 import { cacheiroInitLogger } from '../logger/index.mjs'
