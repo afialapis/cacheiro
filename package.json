@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -26,9 +26,9 @@
   "type": "module",
   "main": "./lib/index.cjs",
   "cjs": "./dist/cacheiro.cjs",
-  "module": "./dist/cacheiro.mjs",
+  "module": "./dist/cacheiro.node.mjs",
   "exports": {
-    "import": "./dist/cacheiro.mjs",
+    "import": "./dist/cacheiro.node.mjs",
     "require": "./dist/cacheiro.cjs",
     "default": "./lib/index.cjs"
   },
