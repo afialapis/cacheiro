@@ -1,4 +1,4 @@
-import {createClient, ReplyError} from 'redis'
+import {createClient} from 'redis'
 import {red, green} from 'tinguir'
 import { BaseStore } from './base.mjs'
 import { cacheiroInitLogger } from '../logger/index.mjs'
@@ -70,10 +70,7 @@ export async function cacheiroRedisStoreInit(options) {
     .on('error', function (err) {
       let msg
       try {
-        if (err instanceof ReplyError)
-          msg = `Error ${err.code}. Command: ${err.command} ${err.toString()}`
-        else
-          msg = `Error ${err.code}. ${err.toString()}`
+        msg = `Error ${err.code}. ${err?.command ? `Command: ${err.command}` : ''} ${err.toString()}`
       } catch(e) {
         msg = `Error ${err.code}. ${err.toString()}`
       }
