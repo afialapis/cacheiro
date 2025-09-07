@@ -10,7 +10,7 @@ class MemoryStore extends BaseStore {
   }
 
   async getKeys(pattern) {
-    const keys = Object.keys(this._cache).map(k => this.stripVKey(k))
+    const keys = Object.keys(this._cache).map(k => this.getExternalKey(k))
     if ((! pattern) || (pattern == '*')) {
       return keys
     }
@@ -25,14 +25,14 @@ class MemoryStore extends BaseStore {
   }
 
   async hasItem(key) {
-    const exists = Object.prototype.hasOwnProperty.call(this._cache, this.makeVkey(key))
+    const exists = Object.prototype.hasOwnProperty.call(this._cache, this.getInnerKey(key))
     return exists
   }
 
   async setItem(key, value, ttl= undefined) {
     const self = this
     
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     self._cache[vkey]= value
 
     let rttl = this.getTTL(ttl)
@@ -55,7 +55,7 @@ class MemoryStore extends BaseStore {
   }
 
   async getItem(key) {
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     return this._cache[vkey]
   }
 
@@ -65,7 +65,7 @@ class MemoryStore extends BaseStore {
       return false
     }
 
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
 
     if (auto !==true) {
       try {

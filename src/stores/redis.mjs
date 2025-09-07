@@ -11,19 +11,19 @@ class RedisStore extends BaseStore {
 
 
   async getKeys(pattern) {
-    const rpatt = this.makeVkey(pattern || '*')
+    const rpatt = this.getInnerKey(pattern || '*')
     const rkeys = await this.client.keys(rpatt)
-    return rkeys.map(k => this.stripVKey(k))
+    return rkeys.map(k => this.getExternalKey(k))
   }
 
   async hasItem(key) {
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     const exists = await this.client.exists(vkey)
     return exists==1
   }
 
   async setItem(key, value, ttl= undefined) {
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     let opts= {}
 
     const rttl = this.getTTL(ttl)
@@ -35,13 +35,13 @@ class RedisStore extends BaseStore {
   }
 
   async getItem(key) {
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     const value = await this.client.get(vkey)
     return value
   }
 
   async expireTime(key) {
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     const ex = await this.client.expireTime(vkey)
     return ex
   }
@@ -52,7 +52,7 @@ class RedisStore extends BaseStore {
       return false
     }
     
-    const vkey = this.makeVkey(key)
+    const vkey = this.getInnerKey(key)
     await this.client.del(vkey)
     return true
   }

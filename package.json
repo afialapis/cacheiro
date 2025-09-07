@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.5.0-beta.1",
+  "version": "0.5.0-beta.2",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -49,9 +49,6 @@
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.3"
-  },
-  "babel": {
-    "extends": "./node_modules/xeira/configs/babel.config.json"
+    "xeira": "^2.0.0-beta.7"
   }
 }

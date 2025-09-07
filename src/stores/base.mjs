@@ -47,11 +47,11 @@ export class BaseStore {
     return `${ns}${this.version}${this.vsep}`
   }
 
-  makeVkey(key) {
+  getInnerKey(key) {
     return `${this._prefixVKey}${key}`
   }
 
-  stripVKey(vkey) {
+  getExternalKey(vkey) {
     if (! vkey) {
       return vkey
     }
