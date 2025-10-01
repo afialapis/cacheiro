@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.5.0-beta.2",
+  "version": "0.5.0-beta.3",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -38,7 +38,8 @@
     "clean-site": "rm -rf arredemo",
     "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
     "lint": "npx xeira lint",
-    "test": "npx xeira test --files=./test/index_src.mjs,./test/index_build.mjs",
+    "test": "npx xeira test --files=./test/index_src.mjs",
+    "test-build": "npx xeira test --files=./test/index_build.mjs",
     "lib": "npm run --silent clean-lib && npx xeira transpile",
     "dist": "npm run --silent clean-dist && npx xeira bundle",
     "site": "npm run --silent clean-site && npx xeira site",

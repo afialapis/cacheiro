@@ -33,16 +33,17 @@ class MemoryStore extends BaseStore {
     const self = this
     
     const vkey = this.getInnerKey(key)
-    self._cache[vkey]= value
-
     let rttl = this.getTTL(ttl)
-
     if (rttl) {
       if (rttl > MAX_TIMEOUT_TTL) {
         self.logWarning(`Memory cache is expired using setTimeout, which has a ttl limit of ${MAX_TIMEOUT_TTL}. A greater value was passed ${rttl} but it will be restricted to the limit.`)
         rttl = MAX_TIMEOUT_TTL     
       }
+    }    
 
+    self._cache[vkey]= {value, ttl: rttl, when: (new Date()).getTime()}
+
+    if (rttl) {
       const cleanerId = setTimeout(() => {
         self.logDebug(`Expiring ${key} after ${rttl} ms`)
         self.unsetItem(key, true)
@@ -56,7 +57,23 @@ class MemoryStore extends BaseStore {
 
   async getItem(key) {
     const vkey = this.getInnerKey(key)
-    return this._cache[vkey]
+    return this._cache?.[vkey]?.['value']
+  }
+
+  async getItemTTL(key) {
+    const vkey = this.getInnerKey(key)
+    const element = this._cache?.[vkey]
+    if (!element) {
+      return
+    }
+    const ttl = this._cache[vkey]?.['ttl']
+    if (! ttl) {
+      return
+    }
+    const now = (new Date()).getTime()
+    const when = this._cache[vkey]['when']
+
+    return when-now
   }
 
   async unsetItem(key, auto) {

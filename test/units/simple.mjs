@@ -12,7 +12,7 @@ export function cacheiroSimpleTest(cache_type) {
   const cacheiro = global.cacheiro
 
   describe(`${cache_type} Cache`, function () {
-    this.timeout(TTL*3)
+    this.timeout(TTL*4)
 
     let cache
     let all_keys = [] 
@@ -57,6 +57,10 @@ export function cacheiroSimpleTest(cache_type) {
       const ok = await cache.setItem('ttl_value', '1', TTL)
       
       assert.strictEqual(ok, true)
+    })   
+
+    it("wait ttl's half ", async () => { 
+      await sleep(TTL/2)
     })    
 
     it("should check ttl value still exists", async () => { 
@@ -65,8 +69,15 @@ export function cacheiroSimpleTest(cache_type) {
       assert.strictEqual(value, '1')
     })   
 
+    it("should check ttl value ", async () => { 
+      // thisTTL is lower than TTL, cause it is the remaining time
+      const thisTTL = await cache.getItemTTL('ttl_value')
+      
+      assert.ok(thisTTL <= (TTL/2))
+    })     
+
     it("wait ttl finishes ", async () => { 
-      await sleep(TTL*2)
+      await sleep(TTL/1.5)
     })    
 
     it("should check ttl value has been expired", async () => { 

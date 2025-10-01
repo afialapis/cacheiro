@@ -9,7 +9,6 @@ class RedisStore extends BaseStore {
     this.client = client
   }
 
-
   async getKeys(pattern) {
     const rpatt = this.getInnerKey(pattern || '*')
     const rkeys = await this.client.keys(rpatt)
@@ -28,6 +27,7 @@ class RedisStore extends BaseStore {
 
     const rttl = this.getTTL(ttl)
     if (rttl) {
+      // PX are miliseconds
       opts.PX= rttl
     }
     const r= await this.client.set(vkey, value, opts)
@@ -40,10 +40,10 @@ class RedisStore extends BaseStore {
     return value
   }
 
-  async expireTime(key) {
+  async getItemTTL(key) {
     const vkey = this.getInnerKey(key)
-    const ex = await this.client.expireTime(vkey)
-    return ex
+    const px = await this.client.PTTL(vkey)
+    return px
   }
 
   async unsetItem(key) {

@@ -37,12 +37,21 @@ export class CombinedStore extends BaseStore {
     const value = await this._redis.getItem(key)
 
     if (value != undefined) {
-      const ex = this._redis.expireTime(key)
+      const ex = this._redis.getItemTTL(key)
       await this._memory.setItem(key, value, ex)
     }
     
     return value
   }
+
+  async getItemTTL(key) {
+    const inmem = await this._memory.hasItem(key)
+    if (inmem) {
+      return this._memory.getItemTTL(key)
+    }
+    return this._redis.getItemTTL(key)
+  }
+
   
   // When updating, just do it twice
 

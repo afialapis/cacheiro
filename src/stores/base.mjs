@@ -75,6 +75,11 @@ export class BaseStore {
     throw 'calustra: BaseStore.getItem() not implemented'
   }
 
+  async getItemTTL(key) {
+    throw 'calustra: BaseStore.getItemTTL() not implemented'
+  }
+
+
   async unsetItem(key) {
     throw 'calustra: BaseStore.unsetItem() not implemented'
   }
