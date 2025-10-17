@@ -1,6 +1,6 @@
 {
   "name": "cacheiro",
-  "version": "0.5.0-beta.3",
+  "version": "0.5.0-beta.4",
   "description": "The simplest -yet effective- cache manager",
   "keywords": [
     "js",
@@ -50,6 +50,6 @@
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.7"
+    "xeira": "^2.0.0-beta.8"
   }
 }
