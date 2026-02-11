@@ -50,6 +50,6 @@
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.8"
+    "xeira": "^2.0.0-beta.10"
   }
 }
