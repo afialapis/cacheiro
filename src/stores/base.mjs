@@ -59,7 +59,7 @@ export class BaseStore {
     return vkey.slice(this._prefixVKey.length)   
   }
 
-  async getKeys(pattern) {
+  async getKeys(pattern) { // eslint-disable-line no-unused-vars
     throw 'calustra: BaseStore.getKeys() not implemented'
   }
 

@@ -3,12 +3,8 @@
   "target": "node",
   "source_index": "./src/index.mjs",
   "linter": "eslint",
-  "transpile_folder": "./lib",
-  "transpiler": "babel",
   "minifier": "uglify",
   "bundle_folder": "./dist",
   "bundler": "rollup",
-  "test_folder": "./test",
-  "demo_mode": 0,
-  "demo_demoer": "rollup"
+  "test_folder": "./test"
 }
