@@ -120,5 +120,9 @@ export class BaseStore {
     return value   
   }
 
+  async close() {
+    throw 'calustra: BaseStore.close() not implemented'
+  }
+
 }
   

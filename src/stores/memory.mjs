@@ -49,6 +49,9 @@ class MemoryStore extends BaseStore {
         self.unsetItem(key, true)
       }, rttl)
 
+      // unref timer so main process won't wait for it to finish (like test envs)
+      if (cleanerId && typeof cleanerId.unref === 'function') cleanerId.unref()
+
       this._cleaners[vkey] = cleanerId
     }
 
@@ -76,7 +79,7 @@ class MemoryStore extends BaseStore {
     return when-now
   }
 
-  async unsetItem(key, auto) {
+  async unsetItem(key) {
     const exists = await this.hasItem(key)
     if (!exists) {
       return false
@@ -84,17 +87,24 @@ class MemoryStore extends BaseStore {
 
     const vkey = this.getInnerKey(key)
 
-    if (auto !==true) {
-      try {
-        clearTimeout(this._cleaners[vkey])
-      } catch {}
-    }
+    try {
+      clearTimeout(this._cleaners[vkey])
+    } catch {}
     
     delete this._cleaners[vkey]
     delete this._cache[vkey]
     return true
   }
 
+  async close() {
+    for (const cleanerId of Object.values(this._cleaners)) {
+      try {
+        clearTimeout(cleanerId)
+      } catch {}
+    }
+    this._cleaners = {}
+    this._cache = {}
+  }
 }
 
 

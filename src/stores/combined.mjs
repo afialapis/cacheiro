@@ -73,6 +73,11 @@ export class CombinedStore extends BaseStore {
     return (mok && rok)
   }
 
+  async close() {
+    await this._memory.close()
+    await this._redis.close()
+  }
+
 }
 
 
