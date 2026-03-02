@@ -1,3 +1,4 @@
+import '../utils/pending-promises.mjs'
 import assert from 'node:assert'
 import test from 'node:test'
 
@@ -17,7 +18,6 @@ const CACHE_TYPE = 'memory'
 test(`${CACHE_TYPE} Cache`, async function (t) {
   let cache
   let all_keys = [] 
-  
 
   t.test("should create the cache instance", async () => {   
     cache = await cacheiro(cacheiroTestConfig(CACHE_TYPE, {version: 1, clean: true}))

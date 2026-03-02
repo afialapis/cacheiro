@@ -1,3 +1,4 @@
+import '../utils/pending-promises.mjs'
 import assert from 'node:assert'
 import test from 'node:test'
 
@@ -163,6 +164,24 @@ test(`${CACHE_TYPE} Cache`, async function (t) {
   })
 
   t.test("should close", async () => {   
+    await cache.close()
+  })
+
+  t.test("stress test for dangling promises", async () => {
+    cache = await cacheiro(cacheiroTestConfig(CACHE_TYPE, {version: 3, clean: true}))
+
+    const promises = []
+    for (let i = 0; i < 10000; i++) {
+        promises.push(cache.setItem(`stress_${i}`, i.toString(), TTL))
+    }
+    await Promise.all(promises)
+
+    const gets = []
+    for (let i = 0; i < 10000; i++) {
+        gets.push(cache.getItem(`stress_${i}`))
+    }
+
+    // Call close immediately while the queue might still be processing
     await cache.close()
   })
 

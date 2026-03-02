@@ -58,9 +58,8 @@ class RedisStore extends BaseStore {
   }
 
   async close() {
-    await this.client.quit()
+    await this.client.close()
   }
-
 }
 
 

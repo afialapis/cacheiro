@@ -1,3 +1,4 @@
+import '../utils/pending-promises.mjs'
 import assert from 'node:assert'
 import test from 'node:test'
 
