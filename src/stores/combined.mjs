@@ -1,18 +1,18 @@
-import { BaseStore } from './base.mjs'
-import { cacheiroMemoryStoreInit } from './memory.mjs'
-import { cacheiroRedisStoreInit } from './redis.mjs'
+import { BaseStore } from "./base.mjs"
+import { cacheiroMemoryStoreInit } from "./memory.mjs"
+import { cacheiroRedisStoreInit } from "./redis.mjs"
 
 export class CombinedStore extends BaseStore {
-  constructor (options, memory, redis) {
-    super('combined', options)
+  constructor(options, memory, redis) {
+    super("combined", options)
     this._memory = memory
     this._redis = redis
   }
-  
+
   // For check operations, trust only Redis
 
   async getKeys(pattern) {
-    return (await this._redis.getKeys(pattern))
+    return await this._redis.getKeys(pattern)
   }
 
   async hasItem(key) {
@@ -36,11 +36,11 @@ export class CombinedStore extends BaseStore {
 
     const value = await this._redis.getItem(key)
 
-    if (value != undefined) {
+    if (value !== undefined) {
       const ex = this._redis.getItemTTL(key)
       await this._memory.setItem(key, value, ex)
     }
-    
+
     return value
   }
 
@@ -52,7 +52,6 @@ export class CombinedStore extends BaseStore {
     return this._redis.getItemTTL(key)
   }
 
-  
   // When updating, just do it twice
 
   async unsetItem(key) {
@@ -66,23 +65,18 @@ export class CombinedStore extends BaseStore {
     const rlen = await this._redis.unsetAll(pattern)
     return mlen + rlen
   }
-  
-  async setItem(key, value, ttl= undefined) {
+
+  async setItem(key, value, ttl = undefined) {
     const mok = await this._memory.setItem(key, value, ttl)
     const rok = await this._redis.setItem(key, value, ttl)
-    return (mok && rok)
+    return mok && rok
   }
 
   async close() {
     await this._memory.close()
     await this._redis.close()
   }
-
 }
-
-
-
-
 
 export async function cacheiroCombinedStoreInit(options) {
   const memory = await cacheiroMemoryStoreInit(options)
@@ -91,7 +85,7 @@ export async function cacheiroCombinedStoreInit(options) {
   const cache = new CombinedStore(options, memory, redis)
 
   if (options?.clean) {
-    await cache.unsetAll('*')
+    await cache.unsetAll("*")
   }
 
   return cache

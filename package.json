@@ -1,11 +1,7 @@
 {
   "name": "cacheiro",
-  "version": "0.5.0-beta.10",
+  "version": "0.5.0-beta.11",
   "description": "The simplest -yet effective- cache manager",
-  "keywords": [
-    "js",
-    "cache"
-  ],
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
     "Donato Lorenzo <donato@afialapis.com>"
@@ -20,31 +16,31 @@
   },
   "homepage": "https://www.afialapis.com/os/cacheiro",
   "type": "module",
-  "main": "./src/index.mjs",
   "exports": {
-    "node": "./src/index.mjs",
-    "import": "./dist/cacheiro.node.mjs",
-    "default": "./src/index.mjs"
+    ".": "./src/index.mjs"
   },
   "files": [
-    "dist",
-    "src"
+    "src",
+    "package.json",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "clean-dist": "rm -rf dist && mkdir dist",
-    "clean-site": "rm -rf arredemo",
-    "clean": "npm run --silent clean-dist && npm run --silent clean-site",
-    "lint": "npx xeira lint --folder=./src && npx xeira lint --folder=./test",
+    "reset": "rm -fr arredemo node_modules package-lock.json && npm i",
+    "lint": "biome check ./src ./test --reporter=github",
+    "lint:fix": "biome check --write ./src ./test --reporter=github",
     "test": "node --test ./test/index.mjs",
-    "dist": "npm run --silent clean-dist && npx xeira bundle --bundle_extension=mjs,mjs.min",
-    "site": "npm run --silent clean-site && npx xeira site",
-    "prepare": "npm run --silent clean && npm run --silent lint && npm run --silent dist && npm run --silent test && npm run --silent site",
-    "reset": "npm run --silent clean && rm -fr node_modules && rm -fr package-lock.json && npm i"
+    "site": "npx arredemo build",
+    "prepublishOnly": "npm run lint && npm run test && npm run site"
   },
   "dependencies": {
-    "redis": "^5.11.0"
+    "redis": "^5.11.0",
+    "tinguir": "^0.0.7"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.10"
+    "@biomejs/biome": "^2.4.5"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

@@ -1,26 +1,26 @@
-import {red, blue, cyan, magenta, yellow, gray} from 'tinguir'
+import { blue, cyan, gray, magenta, red, yellow } from "tinguir"
 
-const LEVELS= {
-  none   : 0,
-  error  : 1,
-  warn   : 2,
-  info   : 3,
+const LEVELS = {
+  none: 0,
+  error: 1,
+  warn: 2,
+  info: 3,
   verbose: 4,
-  debug  : 5,
-  silly  : 6
+  debug: 5,
+  silly: 6
 }
 
 class CacheiroLogger {
-  constructor (level) {
+  constructor(level) {
     this.set_level(level)
   }
 
   set_level(level) {
-    this.level= LEVELS[level != undefined ? level : 'none']
+    this.level = LEVELS[level !== undefined ? level : "none"]
   }
-  
+
   _log(color, lvl, msg) {
-    if (this.level>=lvl) {
+    if (this.level >= lvl) {
       console.log(color(msg))
     }
   }

@@ -1,20 +1,19 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "key|value" }]*/
 
+import { red, yellow } from "tinguir"
 import { cacheiroInitLogger } from "../logger/index.mjs"
-import {red, yellow} from 'tinguir'
-
 
 export class BaseStore {
-  constructor (name, options) {
-    this.name    = name
-    this.options  = options
-    
+  constructor(name, options) {
+    this.name = name
+    this.options = options
+
     this._namespace = options.namespace
-    this.version = isNaN(options?.version) ? 1 : parseInt(options.version)
+    this.version = Number.isNaN(options?.version) ? 1 : parseInt(options.version, 10)
 
-    this.logger  = cacheiroInitLogger(options?.log)
+    this.logger = cacheiroInitLogger(options?.log)
 
-    this.vsep    = options?.version_separator || '::'
+    this.vsep = options?.version_separator || "::"
   }
 
   logDebug(s) {
@@ -30,19 +29,19 @@ export class BaseStore {
   }
 
   getTTL(ttl) {
-    if (! isNaN(ttl)) {
-      return parseInt(ttl)
+    if (!Number.isNaN(ttl)) {
+      return parseInt(ttl, 10)
     }
-    if (! isNaN(this.options.ttl)) {
-      return parseInt(this.options.ttl)
+    if (!Number.isNaN(this.options.ttl)) {
+      return parseInt(this.options.ttl, 10)
     }
     return undefined
   }
-  
+
   get _prefixVKey() {
-    let ns= ''
+    let ns = ""
     if (this._namespace) {
-      ns= `${this._namespace}${this.vsep}`
+      ns = `${this._namespace}${this.vsep}`
     }
     return `${ns}${this.version}${this.vsep}`
   }
@@ -52,36 +51,41 @@ export class BaseStore {
   }
 
   getExternalKey(vkey) {
-    if (! vkey) {
+    if (!vkey) {
       return vkey
     }
 
-    return vkey.slice(this._prefixVKey.length)   
+    return vkey.slice(this._prefixVKey.length)
   }
 
-  async getKeys(pattern) { // eslint-disable-line no-unused-vars
-    throw 'calustra: BaseStore.getKeys() not implemented'
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
+  async getKeys(pattern) {
+    throw "calustra: BaseStore.getKeys() not implemented"
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
   async hasItem(key) {
-    throw 'calustra: BaseStore.hasItem() not implemented'
+    throw "calustra: BaseStore.hasItem() not implemented"
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
   async setItem(key, value) {
-    throw 'calustra: BaseStore.setItem() not implemented'
+    throw "calustra: BaseStore.setItem() not implemented"
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
   async getItem(key) {
-    throw 'calustra: BaseStore.getItem() not implemented'
+    throw "calustra: BaseStore.getItem() not implemented"
   }
 
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
   async getItemTTL(key) {
-    throw 'calustra: BaseStore.getItemTTL() not implemented'
+    throw "calustra: BaseStore.getItemTTL() not implemented"
   }
 
-
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: just mockup
   async unsetItem(key) {
-    throw 'calustra: BaseStore.unsetItem() not implemented'
+    throw "calustra: BaseStore.unsetItem() not implemented"
   }
 
   async getAll(pattern) {
@@ -108,7 +112,7 @@ export class BaseStore {
   }
 
   async getOrSetItem(key, callback) {
-    let value 
+    let value
 
     const exists = await this.hasItem(key)
     if (exists) {
@@ -117,12 +121,10 @@ export class BaseStore {
       value = await callback()
       await this.setItem(key, value)
     }
-    return value   
+    return value
   }
 
   async close() {
-    throw 'calustra: BaseStore.close() not implemented'
+    throw "calustra: BaseStore.close() not implemented"
   }
-
 }
-  
